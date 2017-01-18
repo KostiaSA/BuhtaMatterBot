@@ -1,7 +1,8 @@
 import Client from "./client";
 import WebSocketClient from "./websocket_client";
 import {config} from "./config/config";
-import {bot} from "./bot";
+import {bot} from "./scripts/_registerAllScripts";
+
 
 export const matterClient = new Client();
 const webSocketClient = new WebSocketClient();
@@ -37,7 +38,7 @@ matterClient.login(
                     if (msg.data.sender_name !== config.botUserName) {
                         console.log("запрос от " + msg.data.sender_name + ": " + post.message);
 
-                        console.log(matterClient);
+                        //console.log(matterClient);
                         bot(msg.data.sender_name, post.message)
                             .then((reply: string) => {
 
