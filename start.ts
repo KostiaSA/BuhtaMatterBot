@@ -1,6 +1,7 @@
 import Client from "./client";
 import WebSocketClient from "./websocket_client";
 import {config} from "./config/config";
+import {bot} from "./bot";
 
 export const matterClient = new Client();
 const webSocketClient = new WebSocketClient();
@@ -37,18 +38,36 @@ matterClient.login(
                         console.log("запрос от " + msg.data.sender_name + ": " + post.message);
 
                         console.log(matterClient);
+                        bot(msg.data.sender_name, post.message)
+                            .then((reply: string) => {
 
+                                matterClient.createPost({
+                                        channel_id: post.channel_id,
+                                        message: reply
 
-                        matterClient.createPost({
-                                channel_id: post.channel_id,
-                                message: "ответ на " + post.message
+                                    },
+                                    (success: any) => {
+                                        //console.log("success ", success);
+                                    }, (error: any) => {
+                                        console.error("error ", error);
+                                    });
 
-                            },
-                            (success: any) => {
-                                //console.log("success ", success);
-                            }, (error: any) => {
-                                console.error("error ", error);
+                            })
+                            .catch((err: string) => {
+
+                                matterClient.createPost({
+                                        channel_id: post.channel_id,
+                                        message: err
+
+                                    },
+                                    (success: any) => {
+                                        //console.log("success ", success);
+                                    }, (error: any) => {
+                                        console.error("error ", error);
+                                    });
+
                             });
+
 
                     }
 
