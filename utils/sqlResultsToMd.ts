@@ -1,3 +1,18 @@
+function processMultiLineValue(value: string) {
+    if (!value)
+        return "";
+    value = value.toString();
+    let lines = value.split("\n");
+    if (lines.length > 1) {
+        return "\n" + lines.map((line: string) => {
+                return "    " + line;
+            }).join("\n");
+    }
+    else
+        return value;
+
+}
+
 export function sqlResultsToMd(results: any): string {
     let md: string[] = [];
 
@@ -30,38 +45,31 @@ export function sqlResultsToMd(results: any): string {
             }
 
             if (options.mode === "card") {
-                //
-                // for (let rowIndex = 0; rowIndex < recordset.length; rowIndex++) {
-                //
-                //     let row = recordset[rowIndex];
-                //     // шапка
-                //     let str0 = "";
-                //     let str1 = "";
-                //     for (var key in row) {
-                //         if (key === "bot")
-                //             continue;
-                //         str0 += "|" + key;
-                //         str1 += "|:--:" + key;
-                //     }
-                //     str0 += "|";
-                //     str1 += "|";
-                //     md.push(str0);
-                //     md.push(str1);
-                //
-                //     let strX = "";
-                //     for (var key in row) {
-                //         if (key === "bot")
-                //             continue;
-                //         let value = row[key];
-                //         if (value instanceof Array)
-                //             md.push("|"+value.join("\n"));
-                //         else
-                //             md.push("|"+value);
-                //     }
-                //     strX += "|";
-                //     md.push(strX);
-                // }
-                //
+
+                for (let rowIndex = 0; rowIndex < recordset.length; rowIndex++) {
+
+                    let row = recordset[rowIndex];
+                    // шапка
+                    let str0 = "***";
+                    if (options.title)
+                        str0 = "###" + options.title;
+                    md.push(str0);
+
+                    let strX = "";
+                    for (var key in row) {
+                        if (key === "bot")
+                            continue;
+                        let value = row[key];
+                        console.log(key, value, typeof  value);
+                        if (value instanceof Array)
+                            md.push("**" + key + ":** " + processMultiLineValue(value.join(" ")));
+                        else
+                            md.push("**" + key + ":** " + processMultiLineValue(value));
+                    }
+                    strX += "|";
+                    md.push(strX);
+                }
+
             }
             else {// table
                 // шапка
@@ -89,8 +97,11 @@ export function sqlResultsToMd(results: any): string {
                         let value = row[key];
                         if (value instanceof Array)
                             strX += "|" + value.join(" ");
-                        else
-                            strX += "|" + value.toString().replace(/\n/g," ").replace(/\r/g," ");
+                        else {
+                            if (!value)
+                                value = "";
+                            strX += "|" + value.toString().replace(/\n/g, " ").replace(/\r/g, " ");
+                        }
                     }
                     strX += "|";
                     md.push(strX);

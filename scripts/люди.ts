@@ -31,7 +31,7 @@ export class Люди_script extends BotScript {
 
     async getReply(userName: string, message: string): Promise<string> {
         let words = this.splitMessage(message);
-        if (this.isEqual(words[0], "люди") || this.isEqual(words[0], "телефоны") || this.isEqual(words[0], "сотрудники"))
+        if (this.isEquals(words[0], ["люди","тел","телефоны","сотр","сотрудники",]))
             return getInstantPromise<string>(text);
         else
             return getInstantPromise<string>("");
@@ -40,8 +40,8 @@ export class Люди_script extends BotScript {
     async getHelp(userName: string): Promise<string[]> {
         let help = [
             "|люди|список сотрудников с телефонами|",
-            "|телефоны|список сотрудников с телефонами|",
-            "|сотрудники|список сотрудников с телефонами|",
+            "|(тел)ефоны|список сотрудников с телефонами|",
+            "|(сотр)удники|список сотрудников с телефонами|",
         ];
 
         return getInstantPromise<string[]>(help);
