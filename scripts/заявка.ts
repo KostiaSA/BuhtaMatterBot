@@ -16,7 +16,7 @@ export class Заявка_script extends BotScript {
     async getReply(userName: string, message: string): Promise<string> {
         let words = this.splitMessage(message);
         //console.log(words);
-        if (this.isEqual(words[0], "заявка") && words[1]) {
+        if (this.isEqual(words[0], "z") && words[1]) {
 
             return executeSql(ClientsDb, `EXEC _bot_Информация_по_заявке ${ stringAsSql(words[1]) }`)
                 .then((result: any) => {
