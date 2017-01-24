@@ -17,7 +17,8 @@ export class Help_script extends BotScript {
                 });
             }
 
-            let ret = "|команда|описание|\n";
+            let ret = "### Список команд для бота\n";
+             ret += "|команда|описание|\n";
             ret += "|:--|:--|\n";
             helpTable.forEach((item) => {
 //                helpTable.push(`|${item[0]}|${item[1]}|` + "\n");

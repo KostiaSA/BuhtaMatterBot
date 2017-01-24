@@ -4,11 +4,15 @@ import {BotScript} from "../BotScript";
 import {getInstantPromise} from "../utils/getInstantPromise";
 import {Help_script} from "./help";
 import {Прайс_script} from "./прайс";
+import {Люди_script} from "./люди";
+import {Заявка_script} from "./заявка";
 
 export let registeredBotScripts:BotScript[]=[
     new Help_script(),
     new Привет_script(),
     new Прайс_script(),
+    new Люди_script(),
+    new Заявка_script()
 ];
 
 export async function bot(userName: string, message: string): Promise<string> {

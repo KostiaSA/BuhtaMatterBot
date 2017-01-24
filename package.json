@@ -4,11 +4,17 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "run": "node.exe start.js"
+    "run": "node.exe start.js",
+    "test1": "node.exe tests/test1.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "ws": "^1.1.1"
+    "@types/moment": "^2.13.0",
+    "@types/mssql": "^3.1.29",
+    "ws": "^1.1.1",
+    "moment": "^2.16.0",
+    "mssql": "^3.3.0"
   }
 }
+
