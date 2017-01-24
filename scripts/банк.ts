@@ -9,32 +9,29 @@ import {sqlResultsToMd} from "../utils/sqlResultsToMd";
 export class Банк_script extends BotScript {
 
     async getReply(userName: string, message: string): Promise<string> {
+        if (userName !== "savchenkov" && userName !== "sidorenko")
+            return getInstantPromise<string>("");
+
         let words = this.splitMessage(message);
         //console.log(words);
-        if (this.isEquals(words[0], ["банк","ба"])) {
+        if (this.isEquals(words[0], ["банк", "ба"])) {
 
-            let param1="";
-            let param2="";
-            if (!words[1]){
-                param1='dbo.[DateWithOutTime](getdate())';
-                param2=param1;
+            let param1 = "";
+            let param2 = "";
+            if (!words[1]) {
+                param1 = 'dbo.[DateWithOutTime](getdate())';
+                param2 = param1;
             }
-            else
-            if (this.isEquals(words[1], ["мес","месяц"])){
-                param1='dbo.[Первый День Месяца](getdate())';
-                param2='dbo.[Последний День Месяца](getdate())';
-            }
-            else
-            if (this.isEquals(words[1], ["вч","вчера"])){
-                param1='dbo.[DateWithOutTime](dbo.[Добавление рабочих дней](getdate(),-1,1))';
-                param2=param1;
+            else if (this.isEquals(words[1], ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15"])) {
+                param1 = `dbo.[DateWithOutTime](dateadd(d,-${words[1]},getdate()))`;
+                param2 = "dbo.[DateWithOutTime](getdate())";
             }
 
-            let sql=`
-declare @p1 date=${param1} 
-declare @p2 date=${param2} 
-EXEC [_bot_bank] '51/2',@p1, @p2
-EXEC [_bot_bank] '51/1',@p1, @p2
+            let sql = `
+declare @p1 datetime=${param1}; 
+declare @p2 datetime=${param2}; 
+EXEC [_bot_bank] '51/2',@p1, @p2;
+EXEC [_bot_bank] '51/1',@p1, @p2;
 `;
 
             return executeSql(soft2002Db, sql)
@@ -53,10 +50,12 @@ EXEC [_bot_bank] '51/1',@p1, @p2
     }
 
     async getHelp(userName: string): Promise<string[]> {
+        if (userName !== "savchenkov" && userName !== "sidorenko")
+            return getInstantPromise<string>("");
+
         let help = [
             "|ба(нк)|выписка банка за сегодня|",
-            "|ба(нк) нед(еля)|выписка банка за неделю|",
-            "|ба(нк) мес(яц)|выписка банка за месяц|",
+            "|ба(нк) 5|выписка банка за последние 5 дней (до 15)|"
         ];
 
         return getInstantPromise<string[]>(help);
