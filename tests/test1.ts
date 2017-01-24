@@ -1,6 +1,6 @@
 import {bot} from "../scripts/_registerAllScripts";
 
-bot("savchenkov", "z 123")
+bot("savchenkov", "ба")
     .then((text: string) => {
         console.log(text);
         process.exit(0);

@@ -26,7 +26,6 @@ export class BotScript {
         else {
             let ret = false;
             str2.forEach((str: string) => {
-                console.log(str, str1, this.isEqual(str, str1));
                 if (this.isEqual(str, str1))
                     ret = true;
             });

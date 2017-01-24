@@ -20,9 +20,21 @@ export function sqlResultsToMd(results: any): string {
         let recordset = results[recordsetIndex];
         let row0 = recordset[0];
         if (!row0)
-            break;
+            continue;
         let options = row0.bot;
         if (!options) {
+            options = `{"mode": "flat"}`;
+
+
+        }
+
+        try {
+            options = JSON.parse(options);
+        }
+        catch (err) {
+            return "ОШИБКА: " + err + "\n" + options;
+        }
+        if (options.mode === "flat") {
             for (let rowIndex = 0; rowIndex < recordset.length; rowIndex++) {
                 //console.log("recordset[rowIndex]", recordset[rowIndex]);
                 for (var key in recordset[rowIndex]) {
@@ -36,78 +48,72 @@ export function sqlResultsToMd(results: any): string {
                 }
             }
         }
-        else {
-            try {
-                options = JSON.parse(options);
-            }
-            catch (err) {
-                return "ОШИБКА: " + err + "\n" + options;
-            }
+        else if (options.mode === "card") {
 
-            if (options.mode === "card") {
+            for (let rowIndex = 0; rowIndex < recordset.length; rowIndex++) {
 
-                for (let rowIndex = 0; rowIndex < recordset.length; rowIndex++) {
-
-                    let row = recordset[rowIndex];
-                    // шапка
-                    let str0 = "***";
-                    if (options.title)
-                        str0 = "###" + options.title;
-                    md.push(str0);
-
-                    let strX = "";
-                    for (var key in row) {
-                        if (key === "bot")
-                            continue;
-                        let value = row[key];
-                        console.log(key, value, typeof  value);
-                        if (value instanceof Array)
-                            md.push("**" + key + ":** " + processMultiLineValue(value.join(" ")));
-                        else
-                            md.push("**" + key + ":** " + processMultiLineValue(value));
-                    }
-                    strX += "|";
-                    md.push(strX);
-                }
-
-            }
-            else {// table
+                let row = recordset[rowIndex];
                 // шапка
-                let str0 = "";
-                let str1 = "";
-                for (var key in recordset[0]) {
+                let str0 = "***";
+                if (options.title)
+                    str0 = "###" + options.title;
+                md.push(str0);
+
+                let strX = "";
+                for (var key in row) {
                     if (key === "bot")
                         continue;
-                    str0 += "|" + key;
-                    str1 += "|:--:";
+                    let value = row[key];
+                    console.log(key, value, typeof  value);
+                    if (value instanceof Array)
+                        md.push("**" + key + ":** " + processMultiLineValue(value.join(" ")));
+                    else
+                        md.push("**" + key + ":** " + processMultiLineValue(value));
                 }
-                str0 += "|";
-                str1 += "|";
-                md.push(str0);
-                md.push(str1);
-
-                for (let rowIndex = 0; rowIndex < recordset.length; rowIndex++) {
-
-                    let row = recordset[rowIndex];
-
-                    let strX = "";
-                    for (var key in row) {
-                        if (key === "bot")
-                            continue;
-                        let value = row[key];
-                        if (value instanceof Array)
-                            strX += "|" + value.join(" ");
-                        else {
-                            if (!value)
-                                value = "";
-                            strX += "|" + value.toString().replace(/\n/g, " ").replace(/\r/g, " ");
-                        }
-                    }
-                    strX += "|";
-                    md.push(strX);
-                }
+                //strX += "|";
+                md.push(strX);
             }
+
         }
+        else {// table
+            // шапка
+            let str0 = "";
+            let str1 = "";
+            for (var key in recordset[0]) {
+                if (key === "bot")
+                    continue;
+                str0 += "|" + key;
+                str1 += "|:--:";
+            }
+            str0 += "|";
+            str1 += "|";
+            md.push(str0);
+            md.push(str1);
+
+            for (let rowIndex = 0; rowIndex < recordset.length; rowIndex++) {
+
+                let row = recordset[rowIndex];
+
+                let strX = "";
+                for (var key in row) {
+                    if (key === "bot")
+                        continue;
+                    let value = row[key];
+                    if (value instanceof Array)
+                        strX += "|" + value.join(" ");
+                    else {
+                        if (!value)
+                            value = "";
+                        strX += "|" + value.toString().replace(/\n/g, " ").replace(/\r/g, " ");
+                    }
+                }
+                strX += "|";
+                md.push(strX);
+            }
+            md.push("");
+
+        }
+
         // console.log(row0[""]);
         // console.log(row0);
     }

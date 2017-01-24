@@ -22,3 +22,12 @@ export let ClientsDb: ISqlDb = {
     sqlPassword: "sonyk795",
     sqlDatabase: "Клиенты",
 }
+
+export let soft2002Db: ISqlDb = {
+    sqlServerAddress: "ps-web",
+    sqlServerInstance: "sql2014",
+    sqlServerPort: 1433,
+    sqlLogin: "bot",
+    sqlPassword: "sonyk795",
+    sqlDatabase: "soft2002",
+}
