@@ -19,12 +19,22 @@ export class Банк_script extends BotScript {
                 param1='dbo.[DateWithOutTime](getdate())';
                 param2=param1;
             }
+            else
+            if (this.isEquals(words[1], ["мес","месяц"])){
+                param1='dbo.[Первый День Месяца](getdate())';
+                param2='dbo.[Последний День Месяца](getdate())';
+            }
+            else
+            if (this.isEquals(words[1], ["вч","вчера"])){
+                param1='dbo.[DateWithOutTime](dbo.[Добавление рабочих дней](getdate(),-1,1))';
+                param2=param1;
+            }
 
             let sql=`
-declare @p1 date=${param1}; 
-declare @p2 date=${param2}; 
-EXEC [_bot_bank] '51/2',@p1, @p2;
-EXEC [_bot_bank] '51/1',@p1, @p2;
+declare @p1 date=${param1} 
+declare @p2 date=${param2} 
+EXEC [_bot_bank] '51/2',@p1, @p2
+EXEC [_bot_bank] '51/1',@p1, @p2
 `;
 
             return executeSql(soft2002Db, sql)
