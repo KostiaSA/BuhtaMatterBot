@@ -9,7 +9,7 @@ import {sqlResultsToMd} from "../utils/sqlResultsToMd";
 export class Банк_script extends BotScript {
 
     async getReply(userName: string, message: string): Promise<string> {
-        console.log("Банк_script, запорос от",userName);
+       // console.log("Банк_script, запорос от",userName);
 
         if (userName !== "savchenkov" && userName !== "sidorenko")
             return getInstantPromise<string>("");

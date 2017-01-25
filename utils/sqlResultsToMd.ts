@@ -64,7 +64,7 @@ export function sqlResultsToMd(results: any): string {
                     if (key === "bot")
                         continue;
                     let value = row[key];
-                    console.log(key, value, typeof  value);
+                    //console.log(key, value, typeof  value);
                     if (value instanceof Array)
                         md.push("**" + key.split(":")[0] + ":** " + processMultiLineValue(value.join(" ")));
                     else

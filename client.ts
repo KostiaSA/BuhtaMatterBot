@@ -852,7 +852,7 @@ export default class Client {
     // Routes for Posts
 
     createPost(post, success, error) {
-        console.log("route",`${this.getPostsRoute(post.channel_id)}/create`);
+       // console.log("route",`${this.getPostsRoute(post.channel_id)}/create`);
 
         request.post(`${this.getPostsRoute(post.channel_id)}/create`).set(this.defaultHeaders).type('application/json').accept('application/json').send({...post, create_at: 0}).end(this.handleResponse.bind(this, 'createPost', success, error));
 
