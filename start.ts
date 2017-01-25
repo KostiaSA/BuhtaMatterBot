@@ -68,8 +68,9 @@ matterClient.login(
                 if (msg.event === "posted") {
                     let post = JSON.parse(msg.data.post);
 
-                    if (msg.data.sender_name !== config.botUserName) {
+                    if (msg.data.sender_name !== config.botUserName && msg.data.channel_type=="D") {
                         console.log("запрос от " + msg.data.sender_name + ": " + post.message);
+                        //console.log("msg ", msg);
 
                         //console.log(matterClient);
                         bot(msg.data.sender_name, post.message)
