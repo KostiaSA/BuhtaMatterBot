@@ -9,6 +9,8 @@ import {sqlResultsToMd} from "../utils/sqlResultsToMd";
 export class Банк_script extends BotScript {
 
     async getReply(userName: string, message: string): Promise<string> {
+        console.log("Банк_script, запорос от",userName);
+
         if (userName !== "savchenkov" && userName !== "sidorenko")
             return getInstantPromise<string>("");
 
@@ -36,7 +38,6 @@ EXEC [_bot_bank] '51/1',@p1, @p2;
 
             return executeSql(soft2002Db, sql)
                 .then((result: any) => {
-                    console.log(result);
                     return sqlResultsToMd(result);
                 })
                 .catch((err: string) => {
@@ -51,7 +52,7 @@ EXEC [_bot_bank] '51/1',@p1, @p2;
 
     async getHelp(userName: string): Promise<string[]> {
         if (userName !== "savchenkov" && userName !== "sidorenko")
-            return getInstantPromise<string>("");
+            return getInstantPromise<string[]>([""]);
 
         let help = [
             "|ба(нк)|выписка банка за сегодня|",

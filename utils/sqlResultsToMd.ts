@@ -66,9 +66,9 @@ export function sqlResultsToMd(results: any): string {
                     let value = row[key];
                     console.log(key, value, typeof  value);
                     if (value instanceof Array)
-                        md.push("**" + key + ":** " + processMultiLineValue(value.join(" ")));
+                        md.push("**" + key.split(":")[0] + ":** " + processMultiLineValue(value.join(" ")));
                     else
-                        md.push("**" + key + ":** " + processMultiLineValue(value));
+                        md.push("**" + key.split(":")[0] + ":** " + processMultiLineValue(value));
                 }
                 //strX += "|";
                 md.push(strX);
@@ -82,8 +82,11 @@ export function sqlResultsToMd(results: any): string {
             for (var key in recordset[0]) {
                 if (key === "bot")
                     continue;
-                str0 += "|" + key;
-                str1 += "|:--:";
+                str0 += "|" + key.split(":")[0];
+                if (key.split(":")[1] === "N")
+                    str1 += "|--:";
+                else
+                    str1 += "|:--";
             }
             str0 += "|";
             str1 += "|";
