@@ -22,6 +22,24 @@ function getKursFromJson(json: any, charCode: string, dateStr:string): number {
         return -1;
 }
 
+function getDelta(v2:number,v1:number):string{
+    if (v1===-1 || v2===-1)
+        return "";
+
+    let delta=v2-v1;
+
+    let sign="";
+    if (delta>0.000001)
+        sign="+";
+    else
+    if (delta<-0.000001)
+        sign="";
+
+    let ret="  *("+sign+ delta.toFixed(4)+")*";
+    return ret;
+
+}
+
 export class Курс_script extends BotScript {
 
     async getReply(userName: string, message: string): Promise<string> {
@@ -32,30 +50,40 @@ export class Курс_script extends BotScript {
             try {
                 let yestTitle="вчера";
                 let todayTitle="сегодня";
-                let tomoTitle="на завтра";
+                let tomorTitle="на завтра";
 
-                const today=new Date("2017-01-16");
-                const todayOfWeek=today.getDay();
+                let currDate=new Date();
 
-                let yest=today.setTime( today.getTime() - 1 * 86400000 );
-                if (todayOfWeek===1){
-                    yest=today.setTime( today.getTime() - 3 * 86400000 );
-                    yestTitle="пятница";
+                let today=moment(new Date(currDate));
+
+
+                let yest=moment(new Date(currDate)).add(-1,"days");
+                let tomor=moment(new Date(currDate)).add(1,"days");
+
+                if (yest.toDate().getDay()==1)
+                    yest=moment(new Date(yest.toDate())).add(-2,"days");
+                else
+                if (yest.toDate().getDay()==0) {
+                    yest = moment(new Date(yest.toDate())).add(-1, "days");
                 }
 
-                let tomo=today.setTime( today.getTime() + 1 * 86400000 );
-                if (todayOfWeek===5){
-                    tomo=today.setTime( today.getTime() + 3 * 86400000 );
-                    tomoTitle="на понедельник";
-                }
+                if (today.toDate().getDay()==1)
+                    today=moment(new Date(today.toDate())).add(-2,"days");
+                else
+                if (today.toDate().getDay()==0)
+                    today=moment(new Date(today.toDate())).add(-1,"days");
 
-                let tomorDateStr=moment(tomo).format("DD.MM.YYYY");
-                let todayDateStr=moment(today).format("DD.MM.YYYY");
-                let yestDateStr="26.01.2017";
+                if (tomor.toDate().getDay()==1)
+                    tomor=moment(new Date(tomor.toDate())).add(-2,"days");
+                else
+                if (tomor.toDate().getDay()==0)
+                    tomor=moment(new Date(tomor.toDate())).add(-1,"days");
 
-                // let tomorDateStr="27.01.2017";
-                // let todayDateStr="26.01.2017";
-                // let yestDateStr="25.01.2017";
+                let tomorDateStr=tomor.format("DD.MM.YYYY");
+                let todayDateStr=today.format("DD.MM.YYYY");
+                let yestDateStr=yest.format("DD.MM.YYYY");
+
+                //console.log(yestDateStr,todayDateStr,tomorDateStr);
 
                 let tomorBody = await httpGet(`http://www.cbr.ru/scripts/XML_daily.asp?date_req=`+tomorDateStr);
                 let todayBody = await httpGet(`http://www.cbr.ru/scripts/XML_daily.asp?date_req=`+todayDateStr);
@@ -74,23 +102,30 @@ export class Курс_script extends BotScript {
                 let yestUsd=getKursFromJson(yestJson,"USD",yestDateStr);
                 let yestEur=getKursFromJson(yestJson,"EUR",yestDateStr);
 
-                console.log([tomorUsd,tomorEur]);
-                console.log([todayUsd,todayEur]);
-                console.log([yestUsd,yestEur]);
+                let tomorUsdDelta=tomorUsd-todayUsd;
+                let tomorEurDelta=tomorEur-todayEur;
+
+                let todayUsdDelta=todayUsd-yestUsd;
+                let todayEurDelta=todayEur-yestEur;
+
+                let tomorUsdDelStr="("+tomorUsdDelta.toFixed(4)+")";
+                if (tomorUsd===-1 || todayUsd===-1)
+                    tomorUsdDelStr="";
+
+                //console.log([yestUsd,yestEur]);
+                //console.log([todayUsd,todayEur]);
+                //console.log([tomorUsd,tomorEur]);
 
                 let text=`
-#### курсы валют на ${todayDateStr}
+#### курсы валют ЦБ на ${todayDateStr}
 
-| валюта | ${yestTitle} | ${todayTitle} | ${tomoTitle} |
+| валюта | ${yestTitle} | ${todayTitle} | ${tomorTitle} |
 |:--:|:--:|:--:|:--:|
-|USD|${yestUsd.toString().replace("-1","нет")}|${todayUsd.toString().replace("-1","нет")}|${tomorUsd.toString().replace("-1","нет")}|
-|EUR|${yestEur.toString().replace("-1","нет")}|${todayEur.toString().replace("-1","нет")}|${tomorEur.toString().replace("-1","нет")}|
+|USD|${yestUsd.toString().replace("-1","нет")}|${todayUsd.toString().replace("-1","нет")}${getDelta(todayUsd,yestUsd)}|${tomorUsd.toString().replace("-1","нет")}${getDelta(tomorUsd,todayUsd)}|
+|EUR|${yestEur.toString().replace("-1","нет")}|${todayEur.toString().replace("-1","нет")}${getDelta(todayEur,yestEur)}|${tomorEur.toString().replace("-1","нет")}${getDelta(tomorEur,todayEur)}|
 `
 
                 return text;
-                //return todayJson.ValCurs.Valute[0];
-                //return todayJson.ValCurs.Valute[0].Date.toString();
-                //return todayJson.ValCurs["$"].Date.toString();
             }
             catch (e) {
                 console.error(e);
