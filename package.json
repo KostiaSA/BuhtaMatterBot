@@ -12,9 +12,12 @@
   "dependencies": {
     "@types/moment": "^2.13.0",
     "@types/mssql": "^3.1.29",
-    "ws": "^1.1.1",
+    "@types/request": "0.0.39",
+    "@types/xml2js": "0.0.32",
     "moment": "^2.16.0",
-    "mssql": "^3.3.0"
+    "mssql": "^3.3.0",
+    "request": "^2.79.0",
+    "ws": "^1.1.1",
+    "xml2js": "^0.4.17"
   }
 }
-
