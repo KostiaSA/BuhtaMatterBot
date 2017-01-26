@@ -6,6 +6,7 @@ import {stringAsSql} from "../sql/SqlCore";
 import {sqlResultsToMd} from "../utils/sqlResultsToMd";
 import {httpGet} from "../utils/httpGet";
 import {xmlToJson} from "../utils/xmlToJson";
+import * as moment from "moment";
 
 function getKursFromJson(json: any, charCode: string, dateStr:string): number {
     if (dateStr!==json.ValCurs["$"].Date)
@@ -29,9 +30,27 @@ export class Курс_script extends BotScript {
         if (this.isEquals(words[0], ["ку", "курс"])) {
 
             try {
+                let yestTitle="вчера";
+                let todayTitle="сегодня";
+                let tomoTitle="на завтра";
 
-                let tomorDateStr="28.01.2017";
-                let todayDateStr="27.01.2017";
+                const today=new Date("2017-01-16");
+                const todayOfWeek=today.getDay();
+
+                let yest=today.setTime( today.getTime() - 1 * 86400000 );
+                if (todayOfWeek===1){
+                    yest=today.setTime( today.getTime() - 3 * 86400000 );
+                    yestTitle="пятница";
+                }
+
+                let tomo=today.setTime( today.getTime() + 1 * 86400000 );
+                if (todayOfWeek===5){
+                    tomo=today.setTime( today.getTime() + 3 * 86400000 );
+                    tomoTitle="на понедельник";
+                }
+
+                let tomorDateStr=moment(tomo).format("DD.MM.YYYY");
+                let todayDateStr=moment(today).format("DD.MM.YYYY");
                 let yestDateStr="26.01.2017";
 
                 // let tomorDateStr="27.01.2017";
@@ -59,7 +78,16 @@ export class Курс_script extends BotScript {
                 console.log([todayUsd,todayEur]);
                 console.log([yestUsd,yestEur]);
 
-                return todayEur.toString();
+                let text=`
+#### курсы валют на ${todayDateStr}
+
+| валюта | ${yestTitle} | ${todayTitle} | ${tomoTitle} |
+|:--:|:--:|:--:|:--:|
+|USD|${yestUsd.toString().replace("-1","нет")}|${todayUsd.toString().replace("-1","нет")}|${tomorUsd.toString().replace("-1","нет")}|
+|EUR|${yestEur.toString().replace("-1","нет")}|${todayEur.toString().replace("-1","нет")}|${tomorEur.toString().replace("-1","нет")}|
+`
+
+                return text;
                 //return todayJson.ValCurs.Valute[0];
                 //return todayJson.ValCurs.Valute[0].Date.toString();
                 //return todayJson.ValCurs["$"].Date.toString();
