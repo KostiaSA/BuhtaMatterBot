@@ -7,8 +7,9 @@ import {sqlResultsToMd} from "../utils/sqlResultsToMd";
 import {httpGet} from "../utils/httpGet";
 import {xmlToJson} from "../utils/xmlToJson";
 import * as moment from "moment";
+import {replaceAll} from "../utils/replaceAll";
 
-function getKursFromJson(json: any, charCode: string, dateStr:string): number {
+export function getKursFromJson(json: any, charCode: string, dateStr:string): number {
     if (dateStr!==json.ValCurs["$"].Date)
         return -1;
 
@@ -35,7 +36,7 @@ function getDelta(v2:number,v1:number):string{
     if (delta<-0.000001)
         sign="";
 
-    let ret="  *("+sign+ delta.toFixed(4)+")*";
+    let ret="  *("+sign+ delta.toFixed(2)+")*";
     return ret;
 
 }
@@ -50,7 +51,7 @@ export class Курс_script extends BotScript {
             try {
                 let yestTitle="вчера";
                 let todayTitle="сегодня";
-                let tomorTitle="на завтра";
+                let tomorTitle="завтра";
 
                 let currDate=new Date();
 
@@ -108,16 +109,20 @@ export class Курс_script extends BotScript {
                 let todayUsdDelta=todayUsd-yestUsd;
                 let todayEurDelta=todayEur-yestEur;
 
-                let tomorUsdDelStr="("+tomorUsdDelta.toFixed(4)+")";
-                if (tomorUsd===-1 || todayUsd===-1)
-                    tomorUsdDelStr="";
+                // let tomorUsdDelStr="("+tomorUsdDelta.toFixed(4)+")";
+                // if (tomorUsd===-1 || todayUsd===-1)
+                //     tomorUsdDelStr="";
 
                 //console.log([yestUsd,yestEur]);
                 //console.log([todayUsd,todayEur]);
                 //console.log([tomorUsd,tomorEur]);
 
+                let title=`### курсы валют ЦБ на ${todayDateStr}`;
+                if (words[1])
+                    title=replaceAll(words[1],"_"," ");
+
                 let text=`
-### курсы валют ЦБ на ${todayDateStr}
+${title}
 
 | валюта | ${yestTitle} | ${todayTitle} | ${tomorTitle} |
 |:--:|:--:|:--:|:--:|

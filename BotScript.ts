@@ -10,7 +10,7 @@ export class BotScript {
         if (!message)
             return [];
         else
-            return message.split(/[\s,.!?]+/);
+            return message.split(/[\s,!?]+/);
     }
 
     isEqual(str1: string, str2: string): boolean {

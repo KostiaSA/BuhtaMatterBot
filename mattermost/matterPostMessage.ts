@@ -25,7 +25,7 @@ export async function matterPostMessage(chName: string, message: string): Promis
 
                     matterClient.createPost({
                             channel_id: chId,
-                            message: "test-1",
+                            message: message,
                             // props://JSON.stringify(`
                             //     {
                             //         "attachments": [

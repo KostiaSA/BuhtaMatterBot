@@ -2,6 +2,7 @@ import Client from "./client";
 import WebSocketClient from "./websocket_client";
 import {config} from "./config/config";
 import {bot} from "./scripts/_registerAllScripts";
+import {startAgents} from "./agents/startAgents";
 
 // let price=`
 // ### Прайс лист компании БУХта на 2017 год
@@ -172,5 +173,7 @@ matterClient.login(
         console.error(err.message);
     }
 );
+
+startAgents();
 
 //console.log("buhta matter bot started");

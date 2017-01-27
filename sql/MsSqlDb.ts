@@ -13,7 +13,10 @@ export interface ISqlDb {
 
 export async function getValueFromSql(db: ISqlDb, sqlBatch: string, columnName: string): Promise<any> {
     return executeSql(db, sqlBatch).then((rows) => {
-        return rows[0][0][columnName];
+        if (rows[0].length === 0)
+            return null;
+        else
+            return rows[0][0][columnName];
     });
 }
 
