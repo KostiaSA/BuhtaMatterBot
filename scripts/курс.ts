@@ -117,7 +117,7 @@ export class Курс_script extends BotScript {
                 //console.log([tomorUsd,tomorEur]);
 
                 let text=`
-#### курсы валют ЦБ на ${todayDateStr}
+### курсы валют ЦБ на ${todayDateStr}
 
 | валюта | ${yestTitle} | ${todayTitle} | ${tomorTitle} |
 |:--:|:--:|:--:|:--:|
