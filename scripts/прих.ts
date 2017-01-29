@@ -44,7 +44,7 @@ export class Прих_script extends BotScript {
             return getInstantPromise<string[]>([""]);
 
         let help = [
-            "|прих(од) 45000 евл сопровожение за февраль 2017|создание приходного ордера на 45000 руб от Вихорева|",
+            "|прих(од) 45000 евл за февраль 2017|создание приходного ордера на 45000 руб от Вихорева|",
         ];
 
         return getInstantPromise<string[]>(help);
