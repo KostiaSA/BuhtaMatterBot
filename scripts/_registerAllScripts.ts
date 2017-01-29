@@ -13,6 +13,7 @@ import {Неза_script} from "./неза";
 import {Дог_script} from "./дог";
 import {Курс_script} from "./курс";
 import {Расх_script} from "./расх";
+import {Прих_script} from "./прих";
 
 export let registeredBotScripts:BotScript[]=[
     new Help_script(),
@@ -26,7 +27,8 @@ export let registeredBotScripts:BotScript[]=[
     new Неза_script(),
     new Дог_script(),
     new Курс_script(),
-    new Расх_script()
+    new Расх_script(),
+    new Прих_script()
 ];
 
 export async function bot(userName: string, message: string): Promise<string> {
