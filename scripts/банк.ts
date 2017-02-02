@@ -11,7 +11,7 @@ export class Банк_script extends BotScript {
     async getReply(userName: string, message: string): Promise<string> {
        // console.log("Банк_script, запорос от",userName);
 
-        if (userName !== "savchenkov" && userName !== "sidorenko")
+        if (userName !== "savchenkov" && userName !== "sidorenko" && userName !== "larisa")
             return getInstantPromise<string>("");
 
         let words = this.splitMessage(message);
@@ -51,7 +51,7 @@ EXEC [_bot_bank] '51/1',@p1, @p2;
     }
 
     async getHelp(userName: string): Promise<string[]> {
-        if (userName !== "savchenkov" && userName !== "sidorenko")
+        if (userName !== "savchenkov" && userName !== "sidorenko" && userName !== "larisa")
             return getInstantPromise<string[]>([""]);
 
         let help = [
