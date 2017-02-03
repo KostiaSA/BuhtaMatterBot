@@ -5,7 +5,7 @@ import {config} from "../config/config";
 import {matterPostMessage} from "../mattermost/matterPostMessage";
 
 
-matterPostMessage("kurs","test2");
+//matterPostMessage("kurs","test2");
 
 //test1();
 
@@ -94,12 +94,12 @@ async function test1():Promise<void>{
 }
 
 
-// bot("savchenkov", "ку")
-//     .then((text: string) => {
-//         console.log(text);
-//         process.exit(0);
-//     })
-//     .catch((err:string)=>{
-//         console.error(err);
-//         process.exit(1);
-//     });
+bot("savchenkov", "люди")
+    .then((text: string) => {
+        console.log(text);
+        process.exit(0);
+    })
+    .catch((err:string)=>{
+        console.error(err);
+        process.exit(1);
+    });

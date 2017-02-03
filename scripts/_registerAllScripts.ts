@@ -16,7 +16,7 @@ import {Расх_script} from "./расх";
 import {Прих_script} from "./прих";
 
 export let registeredBotScripts:BotScript[]=[
-    new Help_script(),
+   new Help_script(),
     new Привет_script(),
     new Прайс_script(),
     new Люди_script(),
